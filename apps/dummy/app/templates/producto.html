@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} — TiendaDemo{% endblock %}
+{% block content %}
+<section class="product-detail">
+  <div>
+    <a class="muted" href="/productos">← Volver a productos</a>
+    <h1>{{ product.name }}</h1>
+    <p class="price big">{{ product.price|money0 }}</p>
+    <p class="rating">★ {{ product.rating }} · {{ product.stock }} unidades en stock</p>
+    <p>{{ product.description }}</p>
+
+    <form action="/carrito/agregar" method="post" class="add-to-cart">
+      <input type="hidden" name="slug" value="{{ product.slug }}">
+      <label for="qty">Cantidad</label>
+      {% if 'BUG-03' in bugs %}
+        <input id="qty" type="number" name="qty" value="1">
+      {% else %}
+        <input id="qty" type="number" name="qty" value="1" min="1">
+      {% endif %}
+      <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+    </form>
+  </div>
+
+  <aside>
+    <h3>Categoría</h3>
+    <p><a href="/productos?categoria={{ product.category }}">{{ categories[product.category] }}</a></p>
+    <h3>Envío</h3>
+    <p class="muted">Gratis en compras sobre $150.000.</p>
+  </aside>
+</section>
+
+{% if related %}
+<section class="section">
+  <h2>Relacionados</h2>
+  {% from "partials/cards.html" import product_card %}
+  <div class="grid">
+    {% for p in related %}{{ product_card(p, categories) }}{% endfor %}
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Servicios — TiendaDemo{% endblock %}
+{% block content %}
+<h1>Servicios técnicos</h1>
+
+<section class="section">
+  <div class="grid services-grid">
+    {% for s in services %}
+    <article class="card service-card">
+      <h3>{{ s.name }}</h3>
+      <p class="card-desc">{{ s.summary }}</p>
+      <ul class="includes">
+        {% for item in s.includes %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+      <div class="card-footer">
+        <span class="price">Desde {{ s.price|money0 }}</span>
+        <a class="btn btn-secondary" href="/servicios?servicio={{ s.slug }}#cotizacion">Cotizar este servicio</a>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section" id="cotizacion">
+  <h2>Solicitar cotización{% if servicio %}: {{ (services | selectattr('slug', 'equalto', servicio) | list | first).name }}{% endif %}</h2>
+  <form action="/servicios/cotizar" method="post" class="form" novalidate>
+    <input type="hidden" name="slug" value="{{ servicio or services[0].slug }}">
+    <div class="form-field">
+      <label for="nombre">Nombre completo</label>
+      <input id="nombre" name="nombre" value="{{ quote_form.nombre or '' }}">
+      {% if quote_errors.nombre %}<p class="field-error">{{ quote_errors.nombre }}</p>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" value="{{ quote_form.email or '' }}">
+      {% if quote_errors.email %}<p class="field-error">{{ quote_errors.email }}</p>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="telefono">Teléfono</label>
+      <input id="telefono" name="telefono" value="{{ quote_form.telefono or '' }}" placeholder="Ej: 3001234567">
+      {% if quote_errors.telefono %}<p class="field-error">{{ quote_errors.telefono }}</p>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="presupuesto">Presupuesto (COP)</label>
+      <input id="presupuesto" name="presupuesto" value="{{ quote_form.presupuesto or '' }}" placeholder="Mínimo 100000">
+      {% if quote_errors.presupuesto %}<p class="field-error">{{ quote_errors.presupuesto }}</p>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="mensaje">Mensaje</label>
+      <textarea id="mensaje" name="mensaje" rows="3">{{ quote_form.mensaje or '' }}</textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar solicitud</button>
+  </form>
+</section>
+{% endblock %}

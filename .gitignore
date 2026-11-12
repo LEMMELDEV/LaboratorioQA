@@ -1,0 +1,15 @@
+# Laboratorio QA
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+# Playwright / browser artifacts
+playwright-report/
+test-results/
+traces/
+# Lab artifacts and local env
+artifacts/
+.env
+# OS
+Thumbs.db
+.DS_Store

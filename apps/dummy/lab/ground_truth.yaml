@@ -1,0 +1,102 @@
+# Ground truth del laboratorio: cada defecto sembrado con su comportamiento esperado.
+# El agente QA NO debe leer este archivo: lo usa el sistema de scoring para medir
+# precision (fraccion de bugs reportados que existen) y recall (fraccion de bugs
+# activos que el agente encontro).
+#
+# Los criterios de aceptacion reales viven en requirements/*.feature (en lenguaje
+# natural); este archivo existe para medir objetivamente al agente.
+version: 1
+bugs:
+  - id: BUG-01
+    screen: /productos
+    severity: high
+    detectable_by: ui
+    title: La busqueda solo filtra la pagina visible
+    expected: >
+      Buscar "teclado" debe devolver TODOS los productos del catalogo cuyo nombre
+      contenga "teclado" (2 productos), independientemente de la pagina visible.
+    ui_hint: >
+      Buscar un producto que se sabe que existe pero esta en otra pagina.
+  - id: BUG-02
+    screen: /carrito
+    severity: critical
+    detectable_by: ui+api
+    title: Descuento fantasma de 5% con 3+ unidades
+    expected: >
+      Con 3 unidades de "Teclado Mecanico K7" (45990 c/u): subtotal 137970.00,
+      IVA 26214.30, total 164184.30. Con BUG-02 el total muestra un descuento
+      no especificado de 5% (155975.09).
+    ui_hint: Agregar 3 unidades de cualquier producto y verificar el resumen.
+  - id: BUG-03
+    screen: /carrito
+    severity: critical
+    detectable_by: ui+api
+    title: Cantidades 0 o negativas aceptadas
+    expected: >
+      La cantidad minima por linea es 1. Con BUG-03, ingresar 0 o -1 genera
+      subtotales nulos o negativos.
+    ui_hint: Editar la cantidad de una linea del carrito a 0.
+  - id: BUG-04
+    screen: /servicios (cotizacion)
+    severity: medium
+    detectable_by: ui+api
+    title: Email con '+' es rechazado
+    expected: >
+      El email usuario+tag@dominio.com es valido (RFC) y debe aceptarse.
+      Con BUG-04 la validacion lo rechaza.
+    ui_hint: Enviar el formulario de cotizacion con un email que contenga '+'.
+  - id: BUG-05
+    screen: / (newsletter)
+    severity: high
+    detectable_by: api
+    title: Newsletter muestra exito sin persistir
+    expected: >
+      POST /api/v1/newsletter con un email debe persistirlo: luego
+      GET /api/v1/newsletter/subscribers debe listar ese email.
+    ui_hint: >
+      Dificil de detectar por UI sola (la app siempre responde exito);
+      requiere validar por API o un segundo intento con verificacion.
+  - id: BUG-06
+    screen: /productos
+    severity: low
+    detectable_by: ui
+    title: Paginacion con pagina vacia
+    expected: >
+      El catalogo tiene 12 productos con 6 por pagina => 2 paginas.
+      Con BUG-06 se enlaza una pagina 3 sin contenido.
+    ui_hint: Abrir la ultima pagina de la paginacion.
+  - id: BUG-07
+    screen: footer (todas las paginas)
+    severity: low
+    detectable_by: ui
+    title: Link roto a Terminos y condiciones
+    expected: >
+      El link del footer debe llevar a una pagina 200. Con BUG-07 responde 404.
+    ui_hint: Hacer clic en "Terminos y condiciones" en el footer.
+  - id: BUG-08
+    screen: /productos
+    severity: medium
+    detectable_by: ui+api
+    title: Orden por precio como texto
+    expected: >
+      Ordenar por "Precio (menor a mayor)" debe listar precios en orden numerico
+      creciente (12990, 28990, ... 289990). Con BUG-08 se ordena como cadena.
+    ui_hint: Ordenar por precio y revisar los primeros precios.
+  - id: BUG-09
+    screen: /checkout
+    severity: critical
+    detectable_by: ui+api
+    title: Checkout acepta direccion vacia
+    expected: >
+      La direccion de envio es obligatoria: enviar el formulario sin direccion
+      debe mostrar error 422 y NO crear la orden. Con BUG-09 se crea igual.
+    ui_hint: Confirmar un pedido dejando la direccion vacia.
+  - id: BUG-10
+    screen: /cuenta
+    severity: high
+    detectable_by: ui+api
+    title: Logout no invalida el acceso a /cuenta
+    expected: >
+      Tras cerrar sesion, GET /cuenta debe redirigir a /login.
+      Con BUG-10 se sigue mostrando "Mi cuenta".
+    ui_hint: Cerrar sesion y volver a intentar entrar a la cuenta.

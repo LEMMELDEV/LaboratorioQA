@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Mi cuenta — TiendaDemo{% endblock %}
+{% block content %}
+<h1>Mi cuenta</h1>
+
+{% if user %}
+  <p>Bienvenido, <strong>{{ user.name }}</strong> (<code>{{ user.email }}</code>).</p>
+
+  <h2>Mis pedidos</h2>
+  {% if orders %}
+  <table class="cart-table">
+    <thead><tr><th>Orden</th><th>Total</th><th>Estado</th></tr></thead>
+    <tbody>
+      {% for o in orders %}
+      <tr><td>{{ o.id }}</td><td>{{ o.total }}</td><td>{{ o.status }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="muted">Aún no tienes pedidos.</p>
+  {% endif %}
+{% else %}
+  <div class="alert alert-error">Sesión: invitado. No hay usuario autenticado en esta cuenta.</div>
+  <p class="muted"><a href="/login">Iniciar sesión</a></p>
+{% endif %}
+{% endblock %}

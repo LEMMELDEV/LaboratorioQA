@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Cotización {{ quote.code }} — TiendaDemo{% endblock %}
+{% block content %}
+<section class="success-box">
+  <h1>✅ Cotización recibida</h1>
+  <p class="lead">Guarda tu código de seguimiento:</p>
+  <p class="quote-code">{{ quote.code }}</p>
+  <table class="summary">
+    <tr><th>Servicio</th><td>{{ quote.service }}</td></tr>
+    <tr><th>Cliente</th><td>{{ quote.customer.nombre }}</td></tr>
+    <tr><th>Email</th><td>{{ quote.customer.email }}</td></tr>
+    <tr><th>Teléfono</th><td>{{ quote.customer.telefono }}</td></tr>
+    <tr><th>Presupuesto</th><td>{{ quote.customer.presupuesto|money0 }}</td></tr>
+    <tr><th>Estado</th><td>{{ quote.status }}</td></tr>
+  </table>
+  <a class="btn btn-secondary" href="/servicios">Volver a servicios</a>
+</section>
+{% endblock %}

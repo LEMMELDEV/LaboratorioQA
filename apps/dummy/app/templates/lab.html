@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}/lab — Panel de defectos{% endblock %}
+{% block content %}
+<h1>Panel /lab — Defectos sembrados</h1>
+<p class="muted">Activa o desactiva bugs para probar al agente QA. Cambios en memoria del proceso.</p>
+
+<section class="section">
+  <h2>Perfil</h2>
+  <form action="/lab/perfil" method="post" class="inline-controls">
+    <label><input type="radio" name="perfil" value="none" {% if profile == 'none' %}checked{% endif %}> none (app correcta)</label>
+    <label><input type="radio" name="perfil" value="default" {% if profile == 'default' %}checked{% endif %}> default (todos los bugs)</label>
+    <button type="submit" class="btn btn-secondary">Aplicar perfil</button>
+  </form>
+</section>
+
+<section class="section">
+  <h2>Defectos</h2>
+  <table class="lab-table">
+    <thead>
+      <tr><th>ID</th><th>Pantalla</th><th>Severidad</th><th>Título</th><th>Estado</th><th>Acción</th></tr>
+    </thead>
+    <tbody>
+      {% for d in defects %}
+      <tr>
+        <td><code>{{ d.id }}</code></td>
+        <td>{{ d.screen }}</td>
+        <td><span class="badge sev-{{ d.severity }}">{{ d.severity }}</span></td>
+        <td>
+          <strong>{{ d.title }}</strong><br>
+          <span class="muted">{{ d.description }}</span><br>
+          <span class="expected">Esperado: {{ d.expected }}</span>
+        </td>
+        <td>
+          {% if d.id in active %}<span class="badge badge-on">ACTIVO</span>
+          {% else %}<span class="badge badge-off">inactivo</span>{% endif %}
+        </td>
+        <td>
+          <form action="/lab/bugs/{{ d.id }}/toggle" method="post">
+            <button type="submit" class="btn btn-ghost">{{ 'Desactivar' if d.id in active else 'Activar' }}</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}TiendaDemo{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <script src="/static/js/htmx.min.js" defer></script>
+</head>
+<body>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/">Tienda<span>Demo</span></a>
+    <nav class="main-nav" aria-label="Principal">
+      <a href="/">Inicio</a>
+      <a href="/productos">Productos</a>
+      <a href="/servicios">Servicios</a>
+      <a href="/contacto">Contacto</a>
+    </nav>
+    <div class="header-actions">
+      <a class="cart-link" href="/carrito">Carrito (<span id="cart-count">{{ cart_count }}</span>)</a>
+      {% if user %}
+        <a href="/cuenta">{{ user.name }}</a>
+        <form action="/logout" method="post" class="inline-form">
+          <button type="submit" class="btn btn-ghost">Salir</button>
+        </form>
+      {% else %}
+        <a href="/login">Entrar</a>
+      {% endif %}
+    </div>
+  </div>
+</header>
+
+<main class="container main-content">
+  {% if flash %}
+    <div class="alert {{ 'alert-ok' if flash.category == 'ok' else 'alert-error' }}" role="alert">
+      {{ flash.message }}
+    </div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <a href="/terminos">Términos y condiciones</a>
+    <a href="/contacto">Contacto</a>
+    <a href="/lab" class="lab-link">/lab</a>
+    <span class="muted">© 2026 TiendaDemo — Laboratorio QA</span>
+  </div>
+</footer>
+</body>
+</html>

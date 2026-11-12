@@ -1,0 +1,5 @@
+# Dependencias del agente QA (instalar ademas de apps/dummy/requirements.txt)
+playwright>=1.49
+gherkin-official>=29
+temporalio>=1.9
+pillow>=11

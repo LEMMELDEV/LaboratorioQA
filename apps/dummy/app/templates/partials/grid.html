@@ -1,0 +1,18 @@
+{% from "partials/cards.html" import product_card %}
+{% if result['items'] %}
+<div class="grid" id="grid">
+  {% for p in result['items'] %}
+    {{ product_card(p, categories) }}
+  {% endfor %}
+</div>
+<p class="muted result-count">{{ result['total_items'] }} producto(s) encontrados</p>
+{% else %}
+<div class="empty-state">
+  <h3>Sin resultados</h3>
+  {% if q %}
+    <p>No encontramos productos para «{{ q }}».</p>
+  {% else %}
+    <p>No hay productos en esta vista.</p>
+  {% endif %}
+</div>
+{% endif %}

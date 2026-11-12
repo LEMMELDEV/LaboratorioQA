@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Ingresar — TiendaDemo{% endblock %}
+{% block content %}
+<h1>Ingresar</h1>
+{% if error %}<div class="alert alert-error" role="alert">{{ error }}</div>{% endif %}
+<form action="/login" method="post" class="form narrow">
+  <div class="form-field">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" value="{{ form.email or '' }}">
+  </div>
+  <div class="form-field">
+    <label for="password">Contraseña</label>
+    <input id="password" name="password" type="password">
+  </div>
+  <button type="submit" class="btn btn-primary">Entrar</button>
+</form>
+<p class="muted">Usuario demo: <code>sofia@demo.com</code> / <code>demo1234</code></p>
+<p>¿Sin cuenta? <a href="/registro">Regístrate aquí</a>.</p>
+{% endblock %}

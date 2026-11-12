@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Contacto — TiendaDemo{% endblock %}
+{% block content %}
+<h1>Contacto</h1>
+
+{% if sent %}
+<div class="success-box">
+  <h2>✅ Mensaje enviado</h2>
+  <p>Te responderemos a tu email en menos de 24 horas hábiles.</p>
+  <a class="btn btn-secondary" href="/">Volver al inicio</a>
+</div>
+{% else %}
+<form action="/contacto" method="post" class="form narrow" novalidate>
+  <div class="form-field">
+    <label for="nombre">Nombre</label>
+    <input id="nombre" name="nombre" value="{{ form.nombre or '' }}">
+    {% if errors.nombre %}<p class="field-error">{{ errors.nombre }}</p>{% endif %}
+  </div>
+  <div class="form-field">
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" value="{{ form.email or '' }}">
+    {% if errors.email %}<p class="field-error">{{ errors.email }}</p>{% endif %}
+  </div>
+  <div class="form-field">
+    <label for="mensaje">Mensaje</label>
+    <textarea id="mensaje" name="mensaje" rows="4">{{ form.mensaje or '' }}</textarea>
+    {% if errors.mensaje %}<p class="field-error">{{ errors.mensaje }}</p>{% endif %}
+  </div>
+  <button type="submit" class="btn btn-primary">Enviar mensaje</button>
+</form>
+
+<section class="section">
+  <h2>Preguntas frecuentes</h2>
+  <details>
+    <summary>¿Cuánto demora el envío?</summary>
+    <p>Entre 24 y 48 horas hábiles para ciudades principales.</p>
+  </details>
+  <details>
+    <summary>¿Puedo devolver un producto?</summary>
+    <p>Tienes 30 días calendario desde la entrega, con la caja original.</p>
+  </details>
+  <details>
+    <summary>¿Los servicios incluyen garantía?</summary>
+    <p>El soporte remoto incluye 7 días de garantía.</p>
+  </details>
+</section>
+{% endif %}
+{% endblock %}

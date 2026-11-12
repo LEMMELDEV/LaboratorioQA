@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Checkout — TiendaDemo{% endblock %}
+{% block content %}
+<h1>Finalizar compra</h1>
+
+<div class="checkout-layout">
+  <form action="/checkout" method="post" class="form" novalidate>
+    <div class="form-field">
+      <label for="nombre">Nombre completo</label>
+      <input id="nombre" name="nombre" value="{{ form.nombre or '' }}">
+      {% if errors.nombre %}<p class="field-error">{{ errors.nombre }}</p>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" value="{{ form.email or '' }}">
+      {% if errors.email %}<p class="field-error">{{ errors.email }}</p>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="direccion">Dirección de envío</label>
+      <input id="direccion" name="direccion" value="{{ form.direccion or '' }}" placeholder="Calle 123 #45-67">
+      {% if errors.direccion %}<p class="field-error">{{ errors.direccion }}</p>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="ciudad">Ciudad</label>
+      <input id="ciudad" name="ciudad" value="{{ form.ciudad or '' }}">
+      {% if errors.ciudad %}<p class="field-error">{{ errors.ciudad }}</p>{% endif %}
+    </div>
+    <div class="form-field">
+      <label for="tarjeta">Tarjeta (16 dígitos, dummy)</label>
+      <input id="tarjeta" name="tarjeta" value="{{ form.tarjeta or '' }}" placeholder="4111111111111111">
+      {% if errors.tarjeta %}<p class="field-error">{{ errors.tarjeta }}</p>{% endif %}
+    </div>
+    <button type="submit" class="btn btn-primary">Confirmar pedido</button>
+  </form>
+
+  <aside class="totals">
+    <h2>Tu pedido</h2>
+    <table class="summary">
+      <tr><th>Subtotal</th><td>{{ totals.subtotal|money }}</td></tr>
+      <tr><th>IVA (19%)</th><td>{{ totals.iva|money }}</td></tr>
+      <tr class="grand"><th>Total</th><td>{{ totals.total|money }}</td></tr>
+    </table>
+  </aside>
+</div>
+{% endblock %}

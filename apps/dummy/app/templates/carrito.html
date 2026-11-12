@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Carrito — TiendaDemo{% endblock %}
+{% block content %}
+<h1>Carrito</h1>
+
+{% if lines %}
+<table class="cart-table">
+  <thead>
+    <tr><th>Producto</th><th>Precio</th><th>Cantidad</th><th>Subtotal</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for line in lines %}
+    <tr>
+      <td><a href="/productos/{{ line.slug }}">{{ line.name }}</a></td>
+      <td>{{ line.price|money0 }}</td>
+      <td>
+        <form action="/carrito/actualizar" method="post" class="qty-form">
+          <input type="hidden" name="slug" value="{{ line.slug }}">
+          {% if 'BUG-03' in bugs %}
+            <input type="number" name="qty" value="{{ line.qty }}" aria-label="Cantidad de {{ line.name }}">
+          {% else %}
+            <input type="number" name="qty" value="{{ line.qty }}" min="1" aria-label="Cantidad de {{ line.name }}">
+          {% endif %}
+          <button type="submit" class="btn btn-ghost">Actualizar</button>
+        </form>
+      </td>
+      <td>{{ line.line_total|money }}</td>
+      <td>
+        <form action="/carrito/eliminar" method="post" class="inline-form">
+          <input type="hidden" name="slug" value="{{ line.slug }}">
+          <button type="submit" class="btn btn-danger">Eliminar</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<section class="totals">
+  <h2>Resumen</h2>
+  <table class="summary">
+    <tr><th>Subtotal</th><td>{{ totals.subtotal|money }}</td></tr>
+    <tr><th>IVA (19%)</th><td>{{ totals.iva|money }}</td></tr>
+    <tr class="grand"><th>Total</th><td>{{ totals.total|money }}</td></tr>
+  </table>
+  <a class="btn btn-primary" href="/checkout">Continuar al pago</a>
+</section>
+{% else %}
+<div class="empty-state">
+  <h2>Tu carrito está vacío</h2>
+  <p>Explora el catálogo y agrega tus primeros productos.</p>
+  <a class="btn btn-primary" href="/productos">Ver productos</a>
+</div>
+{% endif %}
+{% endblock %}

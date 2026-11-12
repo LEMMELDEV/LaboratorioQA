@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Pedido {{ order.id }} confirmado — TiendaDemo{% endblock %}
+{% block content %}
+<section class="success-box">
+  <h1>🎉 ¡Pedido confirmado!</h1>
+  <p class="lead">Tu número de orden es:</p>
+  <p class="quote-code">{{ order.id }}</p>
+
+  <table class="summary">
+    <tr><th>Cliente</th><td>{{ order.customer.nombre }} ({{ order.customer.email }})</td></tr>
+    <tr><th>Envío a</th><td>{{ order.customer.direccion }}, {{ order.customer.ciudad }}</td></tr>
+    <tr><th>Estado</th><td>{{ order.status }}</td></tr>
+  </table>
+
+  <h2>Detalles</h2>
+  <table class="cart-table">
+    <thead><tr><th>Producto</th><th>Cant.</th><th>Subtotal</th></tr></thead>
+    <tbody>
+      {% for item in order.items %}
+      <tr><td>{{ item.name }}</td><td>{{ item.qty }}</td><td>{{ item.line_total|money }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <table class="summary">
+    <tr><th>Subtotal</th><td>{{ order.subtotal }}</td></tr>
+    <tr><th>IVA (19%)</th><td>{{ order.iva }}</td></tr>
+    <tr class="grand"><th>Total</th><td>{{ order.total }}</td></tr>
+  </table>
+  <a class="btn btn-primary" href="/productos">Seguir comprando</a>
+</section>
+{% endblock %}

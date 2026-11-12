@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Inicio — TiendaDemo{% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>Todo para tu setup, en un solo lugar</h1>
+  <p class="lead">Periféricos, audio y servicios técnicos con entregas en 48 horas.</p>
+  <a class="btn btn-primary" href="/productos">Ver productos</a>
+</section>
+
+<section class="section">
+  <h2>Destacados de la semana</h2>
+  <div class="grid">
+    {% for p in featured %}
+    <article class="card">
+      <a class="card-link" href="/productos/{{ p.slug }}">
+        <div class="card-badge">{{ categories[p.category] }}</div>
+        <h3>{{ p.name }}</h3>
+        <p class="card-desc">{{ p.description }}</p>
+        <div class="card-footer">
+          <span class="price">{{ p.price|money0 }}</span>
+          <span class="rating">★ {{ p.rating }}</span>
+        </div>
+      </a>
+      <form action="/carrito/agregar" method="post" class="card-actions">
+        <input type="hidden" name="slug" value="{{ p.slug }}">
+        <input type="hidden" name="qty" value="1">
+        <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+      </form>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="section">
+  <h2>Suscríbete a nuestras ofertas</h2>
+  <form action="/newsletter" method="post" class="newsletter">
+    <label for="nl-email">Email</label>
+    <input id="nl-email" type="email" name="email" placeholder="tu@email.com" required>
+    <button type="submit" class="btn btn-primary">Suscribirme</button>
+  </form>
+</section>
+{% endblock %}

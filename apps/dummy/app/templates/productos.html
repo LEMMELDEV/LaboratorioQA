@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Productos — TiendaDemo{% endblock %}
+{% block content %}
+<h1>Productos</h1>
+
+<section class="filters" id="filters">
+  <div class="filter-field">
+    <label for="q">Buscar</label>
+    <input id="q" type="search" name="q" value="{{ q }}"
+           placeholder="Ej: teclado, mouse, monitor"
+           hx-get="/productos" hx-trigger="keyup changed delay:400ms"
+           hx-include="#filters" hx-target="#grid" hx-swap="innerHTML">
+  </div>
+  <div class="filter-field">
+    <label for="categoria">Categoría</label>
+    <select id="categoria" name="categoria"
+            hx-get="/productos" hx-trigger="change"
+            hx-include="#filters" hx-target="#grid" hx-swap="innerHTML">
+      <option value="">Todas</option>
+      {% for key, label in categories.items() %}
+      <option value="{{ key }}" {% if key == categoria %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="filter-field">
+    <label for="orden">Ordenar por</label>
+    <select id="orden" name="orden"
+            hx-get="/productos" hx-trigger="change"
+            hx-include="#filters" hx-target="#grid" hx-swap="innerHTML">
+      <option value="">Relevancia</option>
+      <option value="nombre" {% if orden == 'nombre' %}selected{% endif %}>Nombre (A-Z)</option>
+      <option value="precio" {% if orden == 'precio' %}selected{% endif %}>Precio (menor a mayor)</option>
+      <option value="rating" {% if orden == 'rating' %}selected{% endif %}>Mejor calificados</option>
+    </select>
+  </div>
+</section>
+
+<div id="grid" hx-swap="innerHTML">
+  {% include "partials/grid.html" %}
+</div>
+
+<nav class="pagination" aria-label="Paginación">
+  {% for p in range(1, result['total_pages'] + 1) %}
+    {% if p == result['page'] %}
+      <span class="page current">{{ p }}</span>
+    {% else %}
+      <a class="page" href="/productos?q={{ q }}&categoria={{ categoria }}&orden={{ orden }}&pagina={{ p }}">{{ p }}</a>
+    {% endif %}
+  {% endfor %}
+</nav>
+{% endblock %}

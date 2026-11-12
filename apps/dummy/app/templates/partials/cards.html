@@ -1,0 +1,18 @@
+{% macro product_card(p, categories) %}
+<article class="card">
+  <a class="card-link" href="/productos/{{ p.slug }}">
+    <div class="card-badge">{{ categories[p.category] }}</div>
+    <h3>{{ p.name }}</h3>
+    <p class="card-desc">{{ p.description }}</p>
+    <div class="card-footer">
+      <span class="price">{{ p.price|money0 }}</span>
+      <span class="rating">★ {{ p.rating }}</span>
+    </div>
+  </a>
+  <form action="/carrito/agregar" method="post" class="card-actions">
+    <input type="hidden" name="slug" value="{{ p.slug }}">
+    <input type="hidden" name="qty" value="1">
+    <button type="submit" class="btn btn-primary">Agregar al carrito</button>
+  </form>
+</article>
+{% endmacro %}
