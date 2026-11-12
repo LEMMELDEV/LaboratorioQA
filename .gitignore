@@ -13,3 +13,5 @@ artifacts/
 # OS
 Thumbs.db
 .DS_Store
+
+tools/temporal/temporal.exe
